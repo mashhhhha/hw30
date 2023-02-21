@@ -2,7 +2,10 @@ from django.db.models import Count, Q
 from rest_framework.generics import RetrieveAPIView, ListAPIView, DestroyAPIView, CreateAPIView, UpdateAPIView
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet
-from users.serializers import *
+
+from users.models import Location, User
+from users.serializers import LocationSerializer, UserSerializer, UserListSerializer, UserCreateSerializer, \
+    UserUpdateSerializer
 
 
 class UserPagination(PageNumberPagination):
@@ -21,7 +24,7 @@ class UserDetailView(RetrieveAPIView):
 
 class UserListView(ListAPIView):
     serializer_class = UserListSerializer
-    queryset = User.objects.annotate(total_ads=Count("ad", filter=Q(ad__is__published=True))).order_by('username')
+    queryset = User.objects.annotate(total_ads=Count("ad", filter=Q(ad__is_published=True))).order_by('username')
     pagination_class = UserPagination
 
 
