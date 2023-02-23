@@ -40,6 +40,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         new_user = User.objects.create(**validated_data)
+        new_user.set_password(validated_data['password'])
+        new_user.save()
         for loc in self._locations:
             loc, created = Location.objects.get_or_create(name=loc)
             new_user.location.add(loc)
